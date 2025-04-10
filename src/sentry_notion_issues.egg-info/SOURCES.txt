@@ -1,0 +1,15 @@
+LICENSE
+README.md
+pyproject.toml
+src/notion/__init__.py
+src/notion/client.py
+src/notion/types.py
+src/notion/utils.py
+src/sentry/__init__.py
+src/sentry/types.py
+src/sentry/utils.py
+src/sentry_notion_issues.egg-info/PKG-INFO
+src/sentry_notion_issues.egg-info/SOURCES.txt
+src/sentry_notion_issues.egg-info/dependency_links.txt
+src/sentry_notion_issues.egg-info/requires.txt
+src/sentry_notion_issues.egg-info/top_level.txt

@@ -1,0 +1,6 @@
+fastapi[standard]>=0.104.0
+notion-client>=2.3.0
+pydantic>=2.11.3
+pydantic-settings>=2.8.1
+redis>=5.2.1
+uvicorn>=0.34.0
