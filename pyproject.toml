@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "Standalone server to support linking sentry issues with a notion database"
 readme = "README.md"
 requires-python = ">=3.11"
-license = {text = "MIT"}
+license = "MIT"
 dependencies = [
     "fastapi[standard]>=0.104.0",
     "notion-client>=2.3.0",
