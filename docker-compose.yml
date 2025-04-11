@@ -5,6 +5,8 @@ services:
     build: .
     ports:
       - "8000:8000"
+    volumes:
+      - ./src:/app/src
     environment:
       - NOTION_TOKEN=${NOTION_TOKEN}
       - NOTION_CONFIG=${NOTION_CONFIG}
@@ -13,6 +15,7 @@ services:
       - REDIS_PORT=${REDIS_PORT}
     depends_on:
       - redis
+    command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
 
   redis:
     image: redis:7-alpine

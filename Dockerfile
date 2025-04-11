@@ -2,17 +2,20 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Copy source code first
+# Install uv separately first for better caching if uv version doesn't change
+RUN pip install --no-cache-dir "uv>=0.1.0"
+
+# Copy only the dependency definition file first
+COPY pyproject.toml ./
+
+# Now copy the rest of the application code
 COPY . .
 
-# Install dependencies using uv
-RUN pip install --no-cache-dir "uv>=0.1.0" && \
-    uv pip install --system --no-cache-dir -e .
+# Install dependencies using uv based on pyproject.toml
+# The editable install (-e .) requires the src directory to be present
+RUN uv pip install --system --no-cache-dir -e .
 
 # Set environment variables with defaults
-ENV NOTION_TOKEN=""
-ENV NOTION_CONFIG=""
-ENV SENTRY_NOTION_INTEGRATION_CLIENT_SECRET=""
 ENV CACHE_TIMEOUT="21600"
 ENV REDIS_HOST="redis"
 ENV REDIS_PORT="6379"

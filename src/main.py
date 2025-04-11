@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 
 from notion.client import NotionClient
 from sentry.types import (
@@ -11,14 +11,15 @@ from sentry.types import (
     SentryAsyncFieldResponse,
     SentryIssueResponse,
 )
-from sentry.utils import require_sentry_signature
+from sentry.utils import verify_sentry_signature
 
 app = FastAPI(title="Sentry Notion Integration")
 
 
 @app.post("/create", response_model=SentryIssueResponse)
-@require_sentry_signature
-def create_notion_issue(params: CreateNotionIssueParams):
+def create_notion_issue(
+    params: CreateNotionIssueParams, _=Depends(verify_sentry_signature)
+):
     notion_response = NotionClient.create_issue(
         title=params.fields.title,
         sentry_issue_url=params.webUrl,
@@ -33,8 +34,9 @@ def create_notion_issue(params: CreateNotionIssueParams):
 
 
 @app.get("/search", response_model=List[SentryAsyncFieldResponse])
-@require_sentry_signature
-def search_notion_issues(query: Optional[str] = None):
+def search_notion_issues(
+    query: Optional[str] = None, _=Depends(verify_sentry_signature)
+):
     params = SearchNotionIssuesParams(query=query)
     issues = NotionClient.search_issues(params.query)
 
@@ -55,8 +57,9 @@ def search_notion_issues(query: Optional[str] = None):
 
 
 @app.post("/link", response_model=SentryIssueResponse)
-@require_sentry_signature
-def link_notion_issue(params: LinkNotionIssueParams):
+def link_notion_issue(
+    params: LinkNotionIssueParams, _=Depends(verify_sentry_signature)
+):
     NotionClient.add_sentry_link_to_page(params.fields.page_id, params.webUrl)
 
     page_data = NotionClient.get_page_data(params.fields.page_id)
@@ -69,8 +72,7 @@ def link_notion_issue(params: LinkNotionIssueParams):
 
 
 @app.get("/users", response_model=List[SentryAsyncFieldResponse])
-@require_sentry_signature
-def get_notion_users(query: Optional[str] = None):
+def get_notion_users(query: Optional[str] = None, _=Depends(verify_sentry_signature)):
     params = GetNotionUsersParams(query=query)
     users = NotionClient.get_users(params.query)
     return [

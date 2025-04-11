@@ -42,6 +42,3 @@ venv.bak/
 .vscode/
 *.swp
 *.swo
-
-# Project specific
-src/sentry_notion_issues.egg-info/

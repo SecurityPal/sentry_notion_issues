@@ -63,13 +63,13 @@ class NotionClient:
         properties_object["title"] = {
             "title": [{"type": "text", "text": {"content": title}}]
         }
-        properties_object[settings.notion_config.columns.sentry_url_id] = {
+        properties_object[settings.notion_config.column_names.sentry_url] = {
             "url": sentry_issue_url
         }
 
         # Set the assignee property if owner_id is provided
         if owner_id:
-            properties_object[settings.notion_config.columns.assignee_id] = {
+            properties_object[settings.notion_config.column_names.assignee] = {
                 "people": [{"id": owner_id}]
             }
 
@@ -161,21 +161,23 @@ class NotionClient:
         retrieve_response = NotionRetrievePageResponse.model_validate(raw_response)
 
         page_response = GetPageDataResponse(identifier="", url=retrieve_response.url)
-        for property in retrieve_response.properties.values():
-            if property["type"] == "unique_id":
-                unique_property = NotionUniqueIdPageProperty.model_validate(property)
-                page_response.identifier = f"{unique_property.unique_id.prefix}-{unique_property.unique_id.number}"
-                return page_response
-
-        logger.error("Failed to get page data")
-        raise ValueError("Failed to get page data")
+        id_property = retrieve_response.properties[
+            settings.notion_config.column_names.id
+        ]
+        unique_property = NotionUniqueIdPageProperty.model_validate(id_property)
+        page_response.identifier = (
+            f"{unique_property.unique_id.prefix}-{unique_property.unique_id.number}"
+        )
+        return page_response
 
     @classmethod
     def add_sentry_link_to_page(cls, page_id: UUID, url: str) -> None:
         try:
             cls.notion.pages.update(
                 page_id=str(page_id),
-                properties={settings.notion_config.columns.sentry_url_id: {"url": url}},
+                properties={
+                    settings.notion_config.column_names.sentry_url: {"url": url}
+                },
             )
         except Exception as e:
             logger.error(f"Failed to add Sentry link to Notion page: {e}")
