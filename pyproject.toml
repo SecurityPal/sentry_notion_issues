@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sentry_notion_issues"
+version = "0.1.0"
+description = "Standalone server to support linking sentry issues with a notion database"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+dependencies = [
+    "fastapi[standard]>=0.104.0",
+    "notion-client>=2.3.0",
+    "pydantic>=2.11.3",
+    "pydantic-settings>=2.8.1",
+    "redis>=5.2.1",
+    "uvicorn>=0.34.0",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+packages = {find = {where = ["src"]}}
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+# Using Ruff's defaults for linting rules
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
+
+[tool.mypy]
+plugins = ["pydantic.mypy"]
+
+[dependency-groups]
+dev = [
+    "mypy>=1.15.0",
+    "pytest>=8.3.5",
+    "pytest-env>=1.1.5",
+    "ruff>=0.11.5",
+    "types-redis>=4.6.0.20241004",
+]

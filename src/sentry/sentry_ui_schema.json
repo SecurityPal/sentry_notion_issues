@@ -1,0 +1,43 @@
+{
+  "elements": [
+    {
+      "type": "issue-link",
+      "link": {
+        "uri": "/api/sentry-notion-integration/link",
+        "required_fields": [
+          {
+            "type": "select",
+            "label": "Issue",
+            "name": "page_id",
+            "uri": "/api/sentry-notion-integration/search",
+            "async": true
+          }
+        ]
+      },
+      "create": {
+        "uri": "/api/sentry-notion-integration/create",
+        "required_fields": [
+          {
+            "type": "text",
+            "label": "Title",
+            "name": "title"
+          }
+        ],
+        "optional_fields": [
+          {
+            "type": "text",
+            "label": "Description",
+            "name": "description"
+          },
+          {
+            "type": "select",
+            "label": "Owner",
+            "name": "owner_id",
+            "uri": "/api/sentry-notion-integration/users",
+            "async": true
+          }
+        ]
+      }
+    }
+  ]
+}
