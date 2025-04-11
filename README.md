@@ -7,6 +7,7 @@ This integration supports linking sentry issues with a notion database. Written 
 ### Issue link in Sentry
 
 Issue tracking in Sentry
+
 ![Issue Link in Sentry](./assets/issueLink.png)
 
 ### Creating Notion Issues
